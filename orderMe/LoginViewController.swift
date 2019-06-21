@@ -18,8 +18,8 @@ class LoginViewController: UIViewController {
     
     var cameFromReserveOrOrderProcess = false
     
-    private let loginManager: LoginManager = LoginManager()
-    
+//    private let loginManager: LoginManager = LoginManager()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,11 +33,11 @@ class LoginViewController: UIViewController {
         self.loginLaterButton.layer.insertSublayer(view.themeGradient(), at: 0)
         
         self.navigationController?.isNavigationBarHidden = true
-        AccessToken.refreshCurrentToken { (accessToken, error) in
-            if AccessToken.current != nil {
-                self.loginToServerAfterFacebook()
-            }
-        }
+//        AccessToken.refreshCurrentToken { (accessToken, error) in
+//            if AccessToken.current != nil {
+//                self.loginToServerAfterFacebook()
+//            }
+//        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -45,7 +45,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func continueWithFacebook() {
-        self.loginManager.logOut()
+//        self.loginManager.logOut()
         self.loginButtonClicked()
     }
     
@@ -55,7 +55,8 @@ class LoginViewController: UIViewController {
     }
     
     fileprivate func loginToServerAfterFacebook() {
-        guard let accessToken = AccessToken.current?.authenticationToken else { return }
+//        guard let accessToken = AccessToken.current?.authenticationToken else { return }
+        let accessToken = ""
         NetworkClient.login(accessToken: accessToken) { (user, error) in
             if let error = error { 
                 self.errorAlert(error)
@@ -63,23 +64,23 @@ class LoginViewController: UIViewController {
             }
             SingletonStore.sharedInstance.user = user
             print("APP TOKEN: " + (user?.token ?? "HUUHUH"))
-            print("FACEBOOK TOKEN: " + (AccessToken.current?.authenticationToken ?? "HUHUHUHUH"))
+//            print("FACEBOOK TOKEN: " + (AccessToken.current?.authenticationToken ?? "HUHUHUHUH"))
             self.successLogin()
         }
         NetworkClient.analytics(action: .facebookTapped)
     }
     
     fileprivate func loginButtonClicked() {
-        self.loginManager.loginBehavior = .native
-        self.loginManager.logIn(readPermissions: [.email, .publicProfile],
-                                viewController: self) { result in
-                                    switch result {
-                                    case .success(_, _, _):
-                                        self.loginToServerAfterFacebook()
-                                    case .cancelled:         break
-                                    case .failed(let error): self.errorAlert(error as NSError)
-                                    }
-        }
+//        self.loginManager.loginBehavior = .native
+//        self.loginManager.logIn(readPermissions: [.email, .publicProfile],
+//                                viewController: self) { result in
+//                                    switch result {
+//                                    case .success(_, _, _):
+//                                        self.loginToServerAfterFacebook()
+//                                    case .cancelled:         break
+//                                    case .failed(let error): self.errorAlert(error as NSError)
+//                                    }
+//        }
     }
     
     override var prefersStatusBarHidden: Bool {
