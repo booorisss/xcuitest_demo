@@ -55,7 +55,7 @@ extension Order : Equatable {
 
 // Mark : Hashable
 extension Order : Hashable {
-    var hashValue : Int {
-        return self.id ?? -1
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.id ?? -1)
     }
 }
