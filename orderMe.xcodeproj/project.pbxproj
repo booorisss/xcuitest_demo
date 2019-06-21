@@ -323,7 +323,7 @@
 					2B2EA7681CBB0377001507DD = {
 						CreatedOnToolsVersion = 7.3;
 						DevelopmentTeam = 825DDA558L;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.Keychain = {
 								enabled = 1;
@@ -598,8 +598,7 @@
 				PRODUCT_NAME = OrderME;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -619,8 +618,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.borisgurtovoy.orderme;
 				PRODUCT_NAME = OrderME;
 				PROVISIONING_PROFILE = "";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

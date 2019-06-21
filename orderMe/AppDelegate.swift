@@ -8,9 +8,6 @@
 
 import UIKit
 import Fabric
-import FacebookCore
-import FacebookLogin
-import FacebookShare
 import FBSDKLoginKit
 import FBSDKCoreKit
 import FBSDKShareKit
