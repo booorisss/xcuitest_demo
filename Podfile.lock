@@ -10,9 +10,6 @@ PODS:
   - Bolts/Tasks (1.9.0)
   - Crashlytics (3.10.7):
     - Fabric (~> 1.7.11)
-  - Embassy (4.0.8)
-  - EnvoyAmbassador (4.0.5):
-    - Embassy (~> 4.0)
   - Fabric (1.7.11)
   - FacebookCore (0.3.3):
     - Bolts (~> 1.9)
@@ -37,16 +34,14 @@ PODS:
   - SwiftLint (0.27.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 4.7)
-  - AlamofireImage (~> 3.4)
+  - Alamofire
+  - AlamofireImage
   - Crashlytics
-  - Embassy (~> 4.0)
-  - EnvoyAmbassador (~> 4.0)
   - Fabric
   - FacebookCore
   - FacebookLogin
   - FacebookShare
-  - ObjectMapper (~> 3.3)
+  - ObjectMapper
   - SwiftLint
 
 SPEC REPOS:
@@ -55,8 +50,6 @@ SPEC REPOS:
     - AlamofireImage
     - Bolts
     - Crashlytics
-    - Embassy
-    - EnvoyAmbassador
     - Fabric
     - FacebookCore
     - FacebookLogin
@@ -72,8 +65,6 @@ SPEC CHECKSUMS:
   AlamofireImage: 78d67ccbb763d87ba44b21583d2153500a195630
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   Crashlytics: ccaac42660eb9351b9960c0d66106b0bcf99f4fa
-  Embassy: fe6a3f8dd2d705881c172dcb144fb97b9408f4cd
-  EnvoyAmbassador: 21cef10e70d003801c68ba5281948684a4e25486
   Fabric: f233c9492b3bbc1f04e3882986740f7988a58edb
   FacebookCore: 9ecbe48cfd37c91a93add7f8cec2b4a2c50a1eec
   FacebookLogin: bdaea5789e9b364fa8a1990ba3bbba4fd2197415
@@ -84,6 +75,6 @@ SPEC CHECKSUMS:
   ObjectMapper: b612bf8c8e99c4dc0bb6013a51f7c27966ed5da9
   SwiftLint: 3207c1faa2240bf8973b191820a116113cd11073
 
-PODFILE CHECKSUM: 2e5868998d28ab6d50d36e19af47661853c2d597
+PODFILE CHECKSUM: c0515fe0de2ba6d54e2acf4205a949cd8734d397
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.5.3
