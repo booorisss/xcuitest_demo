@@ -25,7 +25,14 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     
     // Added to support different barcodes
-    let supportedBarCodes = [AVMetadataObjectTypeQRCode, AVMetadataObjectTypeCode128Code, AVMetadataObjectTypeCode39Code, AVMetadataObjectTypeCode93Code, AVMetadataObjectTypeUPCECode, AVMetadataObjectTypePDF417Code, AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeAztecCode]
+    let supportedBarCodes = [AVMetadataObject.ObjectType.qr,
+                             AVMetadataObject.ObjectType.code128,
+                             AVMetadataObject.ObjectType.code39,
+                             AVMetadataObject.ObjectType.code93,
+                             AVMetadataObject.ObjectType.upce,
+                             AVMetadataObject.ObjectType.pdf417,
+                             AVMetadataObject.ObjectType.ean13,
+                             AVMetadataObject.ObjectType.aztec]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,11 +41,11 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         
         navigationController?.isNavigationBarHidden = false
         
-        let captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        let captureDevice = AVCaptureDevice.default(for: AVMediaType(rawValue: convertFromAVMediaType(AVMediaType.video)))
         
         do {
             // Get an instance of the AVCaptureDeviceInput class using the previous device object.
-            let input = try AVCaptureDeviceInput(device: captureDevice)
+            let input = try AVCaptureDeviceInput(device: captureDevice!)
             
             // Initialize the captureSession object.
             captureSession = AVCaptureSession()
@@ -56,8 +63,8 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             captureMetadataOutput.metadataObjectTypes = supportedBarCodes
             
             // Initialize the video preview layer and add it as a sublayer to the viewPreview view's layer.
-            videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-            videoPreviewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+            videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
+            videoPreviewLayer?.videoGravity = AVLayerVideoGravity(rawValue: convertFromAVLayerVideoGravity(AVLayerVideoGravity.resizeAspectFill))
             videoPreviewLayer?.frame = view.layer.bounds
             view.layer.addSublayer(videoPreviewLayer!)
             
@@ -65,7 +72,7 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             captureSession?.startRunning()
             
             // Move the message label to the top view
-            view.bringSubview(toFront: messageLabel)
+            view.bringSubviewToFront(messageLabel)
             
             // Initialize QR Code Frame to highlight the QR code
             qrCodeFrameView = UIView()
@@ -74,7 +81,7 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 qrCodeFrameView.layer.borderColor = UIColor.green.cgColor
                 qrCodeFrameView.layer.borderWidth = 2
                 view.addSubview(qrCodeFrameView)
-                view.bringSubview(toFront: qrCodeFrameView)
+                view.bringSubviewToFront(qrCodeFrameView)
             }
             
         } catch let error as NSError {
@@ -91,10 +98,10 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
+    func metadataOutput(_ captureOutput: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         
         // Check if the metadataObjects array is not nil and it contains at least one object.
-        if metadataObjects == nil || metadataObjects.count == 0 {
+        if metadataObjects.count == 0 {
             qrCodeFrameView?.frame = CGRect.zero
             messageLabel.text = "Put the camera on QR code"
             return
@@ -146,3 +153,18 @@ class GetTableIdVC: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVMetadataObjectObjectType(_ input: AVMetadataObject.ObjectType) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVMediaType(_ input: AVMediaType) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVLayerVideoGravity(_ input: AVLayerVideoGravity) -> String {
+	return input.rawValue
+}

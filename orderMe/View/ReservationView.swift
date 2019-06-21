@@ -46,7 +46,7 @@ class ReservationView: UIView {
 
     }
     
-    func valueChanged(sender: UISegmentedControl) {
+    @objc func valueChanged(sender: UISegmentedControl) {
         delegate?.segmentViewDidChange(to: sender.selectedSegmentIndex)
     }
     

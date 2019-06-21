@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:
-        [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
 
         if ProcessInfo.processInfo.arguments.contains("deleteAllData") {
@@ -74,13 +74,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
-    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any]) -> Bool {
+    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
         
         let isFBURL = ((url.scheme?.hasPrefix("fb\(SDKSettings.appId)"))! && url.host == "authorize")
         if  isFBURL == true {
-            let options: [UIApplicationOpenURLOptionsKey: Any] = [
-                .sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication]!,
-                .annotation: options[UIApplicationOpenURLOptionsKey.annotation]!
+            let options: [UIApplication.OpenURLOptionsKey: Any] = [
+                .sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication]!,
+                .annotation: options[UIApplication.OpenURLOptionsKey.annotation]!
             ]
             return SDKApplicationDelegate.shared.application(application, open: url, options: options)
         }

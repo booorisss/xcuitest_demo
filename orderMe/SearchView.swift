@@ -44,7 +44,7 @@ class SearchView: UIView {
         self.layer.insertSublayer(self.themeGradient(), at: 0)
         self.stackView = UIStackView(arrangedSubviews: [searchField, qrCodeButton])
         self.stackView.frame = frame
-        self.stackView.alignment = UIStackViewAlignment.center
+        self.stackView.alignment = UIStackView.Alignment.center
         self.stackView.spacing = 15
         self.stackView.layoutMargins = UIEdgeInsets(top: 0, left: 18.0, bottom: 0, right: 18.0)
         self.stackView.isLayoutMarginsRelativeArrangement = true
