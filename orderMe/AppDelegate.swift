@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import Fabric
 import FacebookCore
 import FacebookLogin
-import Fabric
+import FacebookShare
 import Crashlytics
 
 

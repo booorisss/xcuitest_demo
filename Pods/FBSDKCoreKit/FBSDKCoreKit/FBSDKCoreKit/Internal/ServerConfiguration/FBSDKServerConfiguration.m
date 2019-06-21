@@ -20,7 +20,6 @@
 #import "FBSDKServerConfiguration+Internal.h"
 
 #import "FBSDKInternalUtility.h"
-#import "FBSDKMacros.h"
 
 #define FBSDK_SERVER_CONFIGURATION_ADVERTISING_ID_ENABLED_KEY @"advertisingIDEnabled"
 #define FBSDK_SERVER_CONFIGURATION_APP_ID_KEY @"appID"
@@ -44,6 +43,8 @@
 #define FBSDK_SERVER_CONFIGURATION_SMART_LOGIN_MENU_ICON_URL_KEY @"smarstLoginBookmarkMenuURL"
 #define FBSDK_SERVER_CONFIGURATION_UPDATE_MESSAGE_KEY @"SDKUpdateMessage"
 #define FBSDK_SERVER_CONFIGURATION_EVENT_BINDINGS  @"eventBindings"
+#define FBSDK_SERVER_CONFIGURATION_RESTRICTIVE_RULES @"restrictiveRules"
+#define FBSDK_SERVER_CONFIGURATION_RESTRICTIVE_PARAMS @"restrictiveParams"
 #define FBSDK_SERVER_CONFIGURATION_VERSION_KEY @"version"
 #define FBSDK_SERVER_CONFIGURATION_TRACK_UNINSTALL_ENABLED_KEY @"trackAppUninstallEnabled"
 
@@ -78,11 +79,6 @@ const NSInteger FBSDKServerConfigurationVersion = 2;
 
 #pragma mark - Object Lifecycle
 
-- (instancetype)init NS_UNAVAILABLE
-{
-  assert(0);
-}
-
 - (instancetype)initWithAppID:(NSString *)appID
                       appName:(NSString *)appName
           loginTooltipEnabled:(BOOL)loginTooltipEnabled
@@ -107,6 +103,8 @@ implicitPurchaseLoggingEnabled:(BOOL)implicitPurchaseLoggingEnabled
         smartLoginMenuIconURL:(NSURL *)smartLoginMenuIconURL
                 updateMessage:(NSString *)updateMessage
                 eventBindings:(NSArray *)eventBindings
+             restrictiveRules:(NSArray<NSDictionary<NSString *, id> *> *)restrictiveRules
+            restrictiveParams:(NSDictionary<NSString *, id> *)restrictiveParams
 {
   if ((self = [super init])) {
     _appID = [appID copy];
@@ -133,6 +131,8 @@ implicitPurchaseLoggingEnabled:(BOOL)implicitPurchaseLoggingEnabled
     _smartLoginBookmarkIconURL = [smartLoginBookmarkIconURL copy];
     _updateMessage = [updateMessage copy];
     _eventBindings = eventBindings;
+    _restrictiveRules = restrictiveRules;
+    _restrictiveParams = restrictiveParams;
     _version = FBSDKServerConfigurationVersion;
   }
   return self;
@@ -160,12 +160,12 @@ implicitPurchaseLoggingEnabled:(BOOL)implicitPurchaseLoggingEnabled
 - (BOOL)_useFeatureWithKey:(NSString *)key dialogName:(NSString *)dialogName
 {
   if ([dialogName isEqualToString:FBSDKDialogConfigurationNameLogin]) {
-    return [(NSNumber *)(_dialogFlows[dialogName][key] ?:
-                         _dialogFlows[FBSDKDialogConfigurationNameDefault][key]) boolValue];
+    return ((NSNumber *)(_dialogFlows[dialogName][key] ?:
+                         _dialogFlows[FBSDKDialogConfigurationNameDefault][key])).boolValue;
   } else {
-    return [(NSNumber *)(_dialogFlows[dialogName][key] ?:
+    return ((NSNumber *)(_dialogFlows[dialogName][key] ?:
                          _dialogFlows[FBSDKDialogConfigurationNameSharing][key] ?:
-                         _dialogFlows[FBSDKDialogConfigurationNameDefault][key]) boolValue];
+                         _dialogFlows[FBSDKDialogConfigurationNameDefault][key])).boolValue;
   }
 }
 
@@ -218,6 +218,8 @@ implicitPurchaseLoggingEnabled:(BOOL)implicitPurchaseLoggingEnabled
   NSURL *smartLoginMenuIconURL = [decoder decodeObjectOfClass:[NSURL class] forKey:FBSDK_SERVER_CONFIGURATION_SMART_LOGIN_MENU_ICON_URL_KEY];
   NSString *updateMessage = [decoder decodeObjectOfClass:[NSString class] forKey:FBSDK_SERVER_CONFIGURATION_UPDATE_MESSAGE_KEY];
   NSArray *eventBindings = [decoder decodeObjectOfClass:[NSArray class] forKey:FBSDK_SERVER_CONFIGURATION_EVENT_BINDINGS];
+  NSArray<NSDictionary<NSString *, id> *> *restrictiveRules = [decoder decodeObjectOfClass:[NSArray class] forKey:FBSDK_SERVER_CONFIGURATION_RESTRICTIVE_RULES];
+  NSDictionary<NSString *, id> *restrictiveParams = [decoder decodeObjectOfClass:[NSDictionary class] forKey:FBSDK_SERVER_CONFIGURATION_RESTRICTIVE_PARAMS];
   NSInteger version = [decoder decodeIntegerForKey:FBSDK_SERVER_CONFIGURATION_VERSION_KEY];
   FBSDKServerConfiguration *configuration = [self initWithAppID:appID
                                                         appName:appName
@@ -243,6 +245,8 @@ implicitPurchaseLoggingEnabled:(BOOL)implicitPurchaseLoggingEnabled
                                           smartLoginMenuIconURL:smartLoginMenuIconURL
                                                   updateMessage:updateMessage
                                                   eventBindings:eventBindings
+                                               restrictiveRules:restrictiveRules
+                                              restrictiveParams:restrictiveParams
                                              ];
   configuration->_version = version;
   return configuration;
@@ -276,6 +280,8 @@ implicitPurchaseLoggingEnabled:(BOOL)implicitPurchaseLoggingEnabled
   [encoder encodeObject:_smartLoginMenuIconURL forKey:FBSDK_SERVER_CONFIGURATION_SMART_LOGIN_MENU_ICON_URL_KEY];
   [encoder encodeObject:_updateMessage forKey:FBSDK_SERVER_CONFIGURATION_UPDATE_MESSAGE_KEY];
   [encoder encodeObject:_eventBindings forKey:FBSDK_SERVER_CONFIGURATION_EVENT_BINDINGS];
+  [encoder encodeObject:_restrictiveRules forKey:FBSDK_SERVER_CONFIGURATION_RESTRICTIVE_RULES];
+  [encoder encodeObject:_restrictiveParams forKey:FBSDK_SERVER_CONFIGURATION_RESTRICTIVE_PARAMS];
   [encoder encodeInteger:_version forKey:FBSDK_SERVER_CONFIGURATION_VERSION_KEY];
 }
 
