@@ -14,4 +14,8 @@ target "orderMe" do
 	pod 'Fabric'
 	pod 'Crashlytics'
 	pod 'SwiftLint'
+	pod 'FBSDKCoreKit'  
+	pod 'FBSDKLoginKit'
+	pod 'FBSDKShareKit'
+	pod 'FBSDKPlacesKit'
 end

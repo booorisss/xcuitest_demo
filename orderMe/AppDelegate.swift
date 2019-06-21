@@ -11,6 +11,9 @@ import Fabric
 import FacebookCore
 import FacebookLogin
 import FacebookShare
+import FBSDKLoginKit
+import FBSDKCoreKit
+import FBSDKShareKit
 import Crashlytics
 
 
@@ -21,12 +24,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions:
         [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-//        SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+
+        ApplicationDelegate.shared.application(application,
+                                               didFinishLaunchingWithOptions: launchOptions)
 
         if ProcessInfo.processInfo.arguments.contains("deleteAllData") {
             clearUserDefaults()
-//            let loginManager = LoginManager()
-//            loginManager.logOut()
+            let loginManager = LoginManager()
+            loginManager.logOut()
         }
 
         if let url = ProcessInfo.processInfo.environment["TEST_BASEURL"] {
@@ -76,15 +81,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any]) -> Bool {
-        
-//        let isFBURL = ((url.scheme?.hasPrefix("fb\(SDKSettings.appId)"))! && url.host == "authorize")
-//        if  isFBURL == true {
-//            let options: [UIApplication.OpenURLOptionsKey: Any] = [
-//                .sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication]!,
-//                .annotation: options[UIApplication.OpenURLOptionsKey.annotation]!
-//            ]
-//            return SDKApplicationDelegate.shared.application(application, open: url, options: options)
-//        }
+
+        let isFBURL = ((url.scheme?.hasPrefix("fb\(Settings.appID ?? "")"))! && url.host == "authorize")
+        if  isFBURL == true {
+            let options: [UIApplication.OpenURLOptionsKey: Any] = [
+                .sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication]!,
+                .annotation: options[UIApplication.OpenURLOptionsKey.annotation]!
+            ]
+            return ApplicationDelegate.shared.application(application,
+                                                          open: url,
+                                                          options: options)
+        }
         return false
     }
     

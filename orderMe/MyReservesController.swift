@@ -142,12 +142,17 @@ class ReservesController: UIViewController, RepeatQuestionProtocol {
     }
     
     func showAlertWithLoginFacebookOption() {
-        let alertController = UIAlertController(title: "You did not login", message: "You need to login for viewing your reservations", preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (action:UIAlertAction!) in
+        let alertController = UIAlertController(title: "You did not login", message: "You need to login for viewing your orders", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { _ in
             self.tabBarController?.selectedIndex = 1
         }
-        let toFacebookAction = UIAlertAction(title: "Login", style: .default) { (action: UIAlertAction) in
+        let toFacebookAction = UIAlertAction(title: "Login", style: .default) { _ in
             self.navigationController?.popToRootViewController(animated: true)
+            if let LoginViewController = self.storyboard?.instantiateViewController(withIdentifier: "RootNaviVC") as? UINavigationController {
+                self.present(LoginViewController, animated: true) {
+                    SingletonStore.sharedInstance.user = nil
+                }
+            }
         }
         alertController.addAction(cancelAction)
         alertController.addAction(toFacebookAction)

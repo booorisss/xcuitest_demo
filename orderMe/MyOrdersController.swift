@@ -9,6 +9,8 @@
 import UIKit
 import FacebookCore
 import FacebookLogin
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 class MyOrdersController: UIViewController {
     
@@ -27,15 +29,15 @@ class MyOrdersController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        let loginLogoutButton = LoginButton(readPermissions: [ .publicProfile, .email ])
-//        let facebookButton = UIBarButtonItem(customView: loginLogoutButton)
-//        self.navigationItem.setRightBarButton(facebookButton, animated: false)
-//        loginLogoutButton.delegate = self
-//        loginLogoutButton.layer.cornerRadius = loginLogoutButton.bounds.height / 2
-//        loginLogoutButton.clipsToBounds = true
-//        if SingletonStore.sharedInstance.user == nil {
-//            showAlertWithLoginFacebookOption()
-//        }
+        let loginLogoutButton = FBLoginButton(permissions: [ "public_profile", "email" ])
+        let facebookButton = UIBarButtonItem(customView: loginLogoutButton)
+        self.navigationItem.setRightBarButton(facebookButton, animated: false)
+        loginLogoutButton.delegate = self
+        loginLogoutButton.layer.cornerRadius = loginLogoutButton.bounds.height / 2
+        loginLogoutButton.clipsToBounds = true
+        if SingletonStore.sharedInstance.user == nil {
+            showAlertWithLoginFacebookOption()
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -111,32 +113,39 @@ extension MyOrdersController: UITableViewDataSource {
     
 }
 
-//extension MyOrdersController: LoginButtonDelegate {
-//    func loginButtonDidCompleteLogin(_ loginButton: LoginButton, result: LoginResult) {
-//        switch result {
-//            case .success(_, _, _): self.loginToServerAfterFacebook()
-//            case .cancelled:        break
-//            case .failed(_):        break
-//        }
-//    }
-//    
-//    func loginButtonDidLogOut(_ loginButton: LoginButton) {
-//        self.navigationController?.popToRootViewController(animated: true)
-//        if let LoginViewController = self.storyboard?.instantiateViewController(withIdentifier: "RootNaviVC") as? UINavigationController {
-//            //self.navigationController?.viewControllers.removeAll()
-//            self.present(LoginViewController, animated: true) {
-//                SingletonStore.sharedInstance.user = nil
-//            }
-//        }
-//    }
-//    
-//    func loginToServerAfterFacebook() {
-//        guard let accessToken = AccessToken.current?.authenticationToken else { return }
-//        NetworkClient.login(accessToken: accessToken) { (user, error) in
-//            SingletonStore.sharedInstance.user = user
-//        }
-//    }
-//}
+extension MyOrdersController: LoginButtonDelegate {
+    func loginButton(_ loginButton: FBLoginButton,
+                     didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
+        if result != nil {
+            self.loginToServerAfterFacebook()
+        }
+    }
+
+    func loginButtonDidCompleteLogin(_ loginButton: FBLoginButton, result: LoginResult) {
+        switch result {
+            case .success(_, _, _): self.loginToServerAfterFacebook()
+            case .cancelled:        break
+            case .failed(_):        break
+        }
+    }
+
+    func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
+        self.navigationController?.popToRootViewController(animated: true)
+        if let LoginViewController = self.storyboard?.instantiateViewController(withIdentifier: "RootNaviVC") as? UINavigationController {
+            //self.navigationController?.viewControllers.removeAll()
+            self.present(LoginViewController, animated: true) {
+                SingletonStore.sharedInstance.user = nil
+            }
+        }
+    }
+
+    func loginToServerAfterFacebook() {
+        guard let accessToken = AccessToken.current?.tokenString else { return }
+        NetworkClient.login(accessToken: accessToken) { (user, error) in
+            SingletonStore.sharedInstance.user = user
+        }
+    }
+}
 
 //MARK: NewOrderProtocol
 extension MyOrdersController: NewOrderProtocol {
